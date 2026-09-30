@@ -38,7 +38,16 @@ export default async function Home() {
       <div className="absolute top-24 right-8 text-primary opacity-50 text-2xl">✧</div>
       <div className="absolute bottom-32 left-10 text-accent opacity-30 text-xl">✦</div>
 
-      <header className="text-center mt-12 mb-8 z-10">
+      <header className="text-center mt-12 mb-8 z-10 relative">
+        <form action={async () => {
+          'use server';
+          const { logout } = await import('./login/actions');
+          await logout();
+        }} className="absolute -top-8 right-0">
+          <button type="submit" className="text-xs bg-white/50 px-3 py-1 rounded-full shadow-sm text-accent hover:bg-white transition border border-accent/20">
+            Log out
+          </button>
+        </form>
         <h1 className="text-4xl font-handwriting font-bold text-accent mb-2">Until We're Together 💌</h1>
         <p className="text-foreground/70 text-sm italic">A little place where our letters can find each other.</p>
       </header>

@@ -24,3 +24,10 @@ export async function login(formData: FormData) {
   await createSession(user.id, user.role, user.relationshipId);
   redirect('/');
 }
+
+import { cookies } from 'next/headers';
+
+export async function logout() {
+  (await cookies()).delete('session');
+  redirect('/login');
+}
