@@ -59,7 +59,7 @@ export async function sendLetter(data: any) {
             <p style="font-size: 16px; color: #333;">Your partner just sent you a new letter!</p>
             <p style="font-size: 14px; color: #666; font-style: italic;">"Distance is temporary. This letter is forever."</p>
             <br/>
-            <a href="http://localhost:3000/mailbox" style="background-color: #c9b0e2; color: white; padding: 12px 24px; text-decoration: none; border-radius: 20px; font-weight: bold;">Open My Letter</a>
+            <a href="https://until-were-together.vercel.app/mailbox" style="background-color: #c9b0e2; color: white; padding: 12px 24px; text-decoration: none; border-radius: 20px; font-weight: bold;">Open My Letter</a>
           </div>
         `,
       });
