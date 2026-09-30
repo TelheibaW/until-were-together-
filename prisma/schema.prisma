@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String        @id @default(uuid())
+  email          String        @unique
+  passwordHash   String
+  role           String        // "SENDER" or "RECEIVER"
+  relationshipId String
+  relationship   Relationship  @relation(fields: [relationshipId], references: [id])
+  createdAt      DateTime      @default(now())
+
+  lettersSent     Letter[]      @relation("SentLetters")
+  lettersReceived Letter[]      @relation("ReceivedLetters")
+}
+
+model Relationship {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  users     User[]
+  letters   Letter[]
+  memories  Memory[]
+}
+
+model Letter {
+  id              String       @id @default(uuid())
+  relationshipId  String
+  relationship    Relationship @relation(fields: [relationshipId], references: [id])
+  senderId        String
+  sender          User         @relation("SentLetters", fields: [senderId], references: [id])
+  receiverId      String
+  receiver        User         @relation("ReceivedLetters", fields: [receiverId], references: [id])
+  
+  title           String?
+  body            String
+  mood            String?
+  status          String       // WRITTEN, DROPPED, TRAVELLING, ARRIVED, DELIVERED
+  
+  createdAt       DateTime     @default(now())
+  sentAt          DateTime?
+  deliveredAt     DateTime?
+  openedAt        DateTime?
+  
+  reaction        String?
+  
+  isSecret        Boolean      @default(false)
+  openWhenDate    DateTime?
+  openWhenCondition String?
+
+  attachments     Attachment[]
+}
+
+model Attachment {
+  id        String   @id @default(uuid())
+  letterId  String
+  letter    Letter   @relation(fields: [letterId], references: [id])
+  type      String   // IMAGE or AUDIO
+  path      String
+  createdAt DateTime @default(now())
+}
+
+model Memory {
+  id             String       @id @default(uuid())
+  relationshipId String
+  relationship   Relationship @relation(fields: [relationshipId], references: [id])
+  imagePath      String?
+  caption        String
+  date           DateTime?
+  location       String?
+  createdAt      DateTime     @default(now())
+}
