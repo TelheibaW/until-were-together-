@@ -4,12 +4,13 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
-export default async function ArchiveDetailPage({ params }: { params: { id: string } }) {
+export default async function ArchiveDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
   const session = await getSession();
   if (!session) redirect('/login');
 
   const letter = await prisma.letter.findUnique({
-    where: { id: params.id },
+    where: { id: resolvedParams.id },
     include: { attachments: true, sender: true }
   });
 
